@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wrestling Timer</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #000;
+        color: #fff;
+      }
+
+      .container {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .scoreboard {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        width: 100%;
+        margin: 20px 0;
+      }
+
+      .player {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 200px;
+        padding: 20px;
+        border-radius: 10px;
+      }
+
+      .player#player1 {
+        background-color: red;
+        color: white;
+      }
+
+      .player#player2 {
+        background-color: blue;
+        color: white;
+      }
+
+      .player h2 {
+        margin: 10px 0;
+        font-size: 1.5em;
+        cursor: pointer;
+      }
+
+      .score {
+        font-size: 4em;
+        cursor: pointer;
+      }
+
+      .round-dots {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+      }
+
+      .round-dot {
+        width: 20px;
+        height: 20px;
+        background-color: gray;
+        border-radius: 50%;
+        margin: 0 5px;
+        cursor: pointer;
+      }
+
+      .round-dot.active {
+        background-color: yellow;
+      }
+
+      .control-buttons {
+        display: flex;
+        justify-content: center;
+        margin-top: 15px;
+      }
+
+      .control-buttons button {
+        font-size: 2em;
+        background-color: #fff;
+        color: #000;
+        padding: 10px;
+        margin: 0 10px;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+      }
+
+      .timer-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 30px 0;
+      }
+
+      .timer-adjust {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0 20px;
+      }
+
+      .timer-adjust button {
+        font-size: 2em;
+        background-color: #fff;
+        color: #000;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+      }
+
+      .timer {
+        font-size: 5em;
+        font-family: "Digital-7 Mono", sans-serif;
+        color: red;
+        text-align: center;
+      }
+
+      .period {
+        margin-top: 20px;
+        font-size: 1.8em;
+        cursor: pointer;
+      }
+
+      .menu {
+        margin-top: 20px;
+      }
+
+      .settings-menu {
+        display: none;
+        background-color: #444;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 10px;
+      }
+
+      .settings-menu button {
+        background-color: #fff;
+        color: #000;
+        padding: 5px;
+        margin: 5px 0;
+        width: 100%;
+        border: none;
+        cursor: pointer;
+      }
+
+      .settings-icon {
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.5em;
+        cursor: pointer;
+      }
+
+      /* Adding digital clock font from Google Fonts */
+      @font-face {
+        font-family: "Digital-7 Mono";
+        src: url("https://fonts.cdnfonts.com/s/17088/Digital-7Mono.woff")
+          format("woff");
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      .start-button {
+        font-size: 1.5em;
+        padding: 10px 20px;
+        margin-top: 20px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .start-button:hover {
+        background-color: #218838;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="scoreboard">
+        <div class="player" id="player1">
+          <h2 contenteditable="true">Player1</h2>
+          <div class="score" id="score1">0</div>
+          <div class="round-dots">
+            <div
+              class="round-dot"
+              id="p1-dot1"
+              onclick="markDot('p1-dot1')"
+            ></div>
+            <div
+              class="round-dot"
+              id="p1-dot2"
+              onclick="markDot('p1-dot2')"
+            ></div>
+            <div
+              class="round-dot"
+              id="p1-dot3"
+              onclick="markDot('p1-dot3')"
+            ></div>
+          </div>
+          <div class="control-buttons">
+            <button onclick="addScore('score1')">+</button>
+            <button onclick="subtractScore('score1')">-</button>
+          </div>
+        </div>
+
+        <div class="player" id="player2">
+          <h2 contenteditable="true">Player2</h2>
+          <div class="score" id="score2">0</div>
+          <div class="round-dots">
+            <div
+              class="round-dot"
+              id="p2-dot1"
+              onclick="markDot('p2-dot1')"
+            ></div>
+            <div
+              class="round-dot"
+              id="p2-dot2"
+              onclick="markDot('p2-dot2')"
+            ></div>
+            <div
+              class="round-dot"
+              id="p2-dot3"
+              onclick="markDot('p2-dot3')"
+            ></div>
+          </div>
+          <div class="control-buttons">
+            <button onclick="addScore('score2')">+</button>
+            <button onclick="subtractScore('score2')">-</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Timer Section with Adjustments -->
+      <div class="timer-container">
+        <div class="timer-adjust">
+          <button onclick="adjustMinutes(1)">+</button>
+          <button onclick="adjustMinutes(-1)">-</button>
+        </div>
+
+        <div class="timer" id="timer">03:00</div>
+
+        <div class="timer-adjust">
+          <button onclick="adjustSeconds(1)">+</button>
+          <button onclick="adjustSeconds(-1)">-</button>
+        </div>
+      </div>
+
+      <!-- Start/Stop Timer Button -->
+      <button class="start-button" onclick="toggleTimer()">Start Timer</button>
+
+      <div class="period" id="period" onclick="nextPeriod()">Period 1</div>
+
+      <div class="menu">
+        <button class="settings-icon" onclick="toggleSettings()">⚙️</button>
+        <div class="settings-menu" id="settingsMenu">
+          <button onclick="resetAll()">Reset All</button>
+          <button onclick="resetScores()">Reset Scores</button>
+          <button onclick="resetTimer()">Reset Timer</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Score management
+      function addScore(player) {
+        const score = document.getElementById(player);
+        score.textContent = parseInt(score.textContent) + 1;
+      }
+
+      function subtractScore(player) {
+        const score = document.getElementById(player);
+        if (parseInt(score.textContent) > 0) {
+          score.textContent = parseInt(score.textContent) - 1;
+        }
+      }
+
+      // Timer management
+      let timerRunning = false;
+      let timeRemaining = 180; // Initial time set to 3 minutes (180 seconds)
+      let timerInterval;
+
+      function toggleTimer() {
+        if (timerRunning) {
+          clearInterval(timerInterval);
+          document.querySelector(".start-button").textContent = "Start Timer";
+        } else {
+          timerInterval = setInterval(countDown, 1000);
+          document.querySelector(".start-button").textContent = "Stop Timer";
+        }
+        timerRunning = !timerRunning;
+      }
+
+      function countDown() {
+        if (timeRemaining > 0) {
+          timeRemaining--;
+          updateTimerDisplay();
+        } else {
+          clearInterval(timerInterval);
+          timerRunning = false;
+          document.querySelector(".start-button").textContent = "Start Timer";
+        }
+      }
+
+      function updateTimerDisplay() {
+        const minutes = Math.floor(timeRemaining / 60);
+        const seconds = timeRemaining % 60;
+        document.getElementById("timer").textContent = `${String(
+          minutes
+        ).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+      }
+
+      // Adjust minutes
+      function adjustMinutes(amount) {
+        timeRemaining += amount * 60;
+        if (timeRemaining < 0) timeRemaining = 0; // Prevent negative time
+        updateTimerDisplay();
+      }
+
+      // Adjust seconds by 1 second instead of 10
+      function adjustSeconds(amount) {
+        timeRemaining += amount;
+        if (timeRemaining < 0) timeRemaining = 0; // Prevent negative time
+        updateTimerDisplay();
+      }
+
+      // Period management
+      let currentPeriod = 1;
+
+      function nextPeriod() {
+        currentPeriod++;
+        document.getElementById(
+          "period"
+        ).textContent = `Period ${currentPeriod}`;
+      }
+
+      // Round Win Management
+      function markDot(dotId) {
+        const dot = document.getElementById(dotId);
+        if (dot.classList.contains("active")) {
+          dot.classList.remove("active");
+        } else {
+          dot.classList.add("active");
+        }
+      }
+
+      // Settings menu
+      function toggleSettings() {
+        const menu = document.getElementById("settingsMenu");
+        menu.style.display = menu.style.display === "block" ? "none" : "block";
+      }
+
+      // Reset functions
+      function resetAll() {
+        resetScores();
+        resetTimer();
+        resetDots();
+      }
+
+      function resetScores() {
+        document.getElementById("score1").textContent = 0;
+        document.getElementById("score2").textContent = 0;
+      }
+
+      function resetTimer() {
+        timeRemaining = 180; // Reset to 3 minutes
+        updateTimerDisplay();
+        clearInterval(timerInterval);
+        timerRunning = false;
+        document.querySelector(".start-button").textContent = "Start Timer";
+      }
+
+      function resetDots() {
+        const dots = document.querySelectorAll(".round-dot");
+        dots.forEach((dot) => dot.classList.remove("active"));
+      }
+    </script>
+  </body>
+</html>
